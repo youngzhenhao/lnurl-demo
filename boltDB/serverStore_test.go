@@ -9,6 +9,13 @@ import (
 	"time"
 )
 
+func TestInitServerDB(t *testing.T) {
+	err := InitServerDB()
+	if err != nil {
+		return
+	}
+}
+
 func TestServerStore_AllUsers(t *testing.T) {
 	db, err := bolt.Open("server.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {

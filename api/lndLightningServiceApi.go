@@ -2,11 +2,17 @@ package api
 
 import (
 	"context"
+	"encoding/hex"
 	"fmt"
 	"github.com/lightningnetwork/lnd/lnrpc"
 	"google.golang.org/grpc"
 )
 
+// AddInvoice called by Alice
+//
+//	@Description:AddInvoice attempts to add a new invoice to the invoice database.
+//	Any duplicated invoices are rejected, therefore all invoices must have a unique payment preimage.
+//	@return string
 func AddInvoice(value int64, memo string) string {
 	grpcHost := GetEnv("RPC_SERVER")
 	tlsCertPath := GetEnv("TLS_CERT_PATH")
@@ -35,4 +41,39 @@ func AddInvoice(value int64, memo string) string {
 		return ""
 	}
 	return response.GetPaymentRequest()
+}
+
+// SendPaymentSync called by Bob
+//
+//	@Description:SendPaymentSync is the synchronous non-streaming version of SendPayment.
+//	This RPC is intended to be consumed by clients of the REST proxy. Additionally, this RPC expects the destination's public key and the payment hash (if any) to be encoded as hex strings.
+//	@return string
+func SendPaymentSync(invoice string) string {
+	grpcHost := GetEnv("RPC_SERVER")
+	tlsCertPath := GetEnv("TLS_CERT_PATH")
+	macaroonPath := GetEnv("MACAROON_PATH")
+	creds := newTlsCert(tlsCertPath)
+	macaroon := getMacaroon(macaroonPath)
+	conn, err := grpc.Dial(grpcHost, grpc.WithTransportCredentials(creds),
+		grpc.WithPerRPCCredentials(newMacaroonCredential(macaroon)))
+	if err != nil {
+		fmt.Printf("%s did not connect: %v\n", GetTimeNow(), err)
+	}
+	defer func(conn *grpc.ClientConn) {
+		err := conn.Close()
+		if err != nil {
+			fmt.Printf("%s conn Close err: %v\n", GetTimeNow(), err)
+		}
+	}(conn)
+	client := lnrpc.NewLightningClient(conn)
+	request := &lnrpc.SendRequest{
+		PaymentRequest: invoice,
+	}
+	stream, err := client.SendPaymentSync(context.Background(), request)
+	if err != nil {
+		fmt.Printf("%s client.SendPaymentSync :%v\n", GetTimeNow(), err)
+		return "false"
+	}
+	fmt.Printf(GetTimeNow() + stream.String())
+	return hex.EncodeToString(stream.PaymentHash)
 }

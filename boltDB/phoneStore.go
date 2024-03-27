@@ -9,14 +9,19 @@ import (
 )
 
 type Invoice struct {
-	ID string
+	ID string `json:"id"`
 	//PubKey     string
-	Amount     int
-	InvoiceStr string
+	Amount     int    `json:"amount"`
+	InvoiceStr string `json:"invoiceStr"`
 }
 
 type PhoneStore struct {
 	DB *bolt.DB
+}
+
+func InitPhoneDB() error {
+	_, err := createBucketInPhoneDB("./phone.db", "invoices")
+	return err
 }
 
 func createBucketInPhoneDB(DBName, bucket string) (*bolt.Bucket, error) {

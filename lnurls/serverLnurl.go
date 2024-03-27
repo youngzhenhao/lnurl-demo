@@ -28,7 +28,7 @@ func setupRouterOnServer() *gin.Engine {
 		name := c.PostForm("name")
 		socket := c.PostForm("socket")
 		result := true
-		if id == "" || name == "" {
+		if name == "" || socket == "" {
 			result = false
 		}
 		user := &boltDB.User{
@@ -36,11 +36,14 @@ func setupRouterOnServer() *gin.Engine {
 			Name:   name,
 			Socket: socket,
 		}
+		//fmt.Println(user)
 		err := boltDB.InitServerDB()
 		if err != nil {
 			fmt.Printf("%s InitServerDB err :%v\n", api.GetTimeNow(), err)
 		}
-		db, err := bolt.Open("server.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
+		db, err := bolt.Open("server.db", 0600, &bolt.Options{
+			Timeout: 1 * time.Second,
+		})
 		if err != nil {
 			fmt.Printf("%s bolt.Open :%v\n", api.GetTimeNow(), err)
 		}
@@ -110,6 +113,7 @@ func setupRouterOnServer() *gin.Engine {
 		c.JSON(http.StatusOK, gin.H{
 			"time":    api.GetTimeNow(),
 			"id":      id,
+			"amount":  amount,
 			"invoice": invoice,
 			"result":  result,
 		})

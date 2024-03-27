@@ -9,6 +9,13 @@ import (
 	"time"
 )
 
+func TestInitPhoneDB(t *testing.T) {
+	err := InitPhoneDB()
+	if err != nil {
+		return
+	}
+}
+
 func TestPhoneStore_AllInvoices(t *testing.T) {
 	db, err := bolt.Open("phone.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {

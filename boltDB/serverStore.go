@@ -13,10 +13,15 @@ type ServerStore struct {
 }
 
 type User struct {
-	ID     string
-	Name   string
-	Socket string
+	ID     string `json:"id"`
+	Name   string `json:"name"`
+	Socket string `json:"socket"`
 	//FuncApi string
+}
+
+func InitServerDB() error {
+	_, err := createBucketInServerDB("./server.db", "users")
+	return err
 }
 
 func createBucketInServerDB(DBName, bucket string) (*bolt.Bucket, error) {

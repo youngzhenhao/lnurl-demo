@@ -14,8 +14,11 @@ func main() {
 	//allInvoices()
 
 	//lnurls.RouterRunOnServer()
-	lnurls.RouterRunOnPhone()
+	//lnurls.RouterRunOnPhone()
+
+	fmt.Printf(lnurls.Decode("LNURL1DP68GUP69UHNZV3H9CCZUVPWXYARJVPCXQHHQCTE8A5KG0FSXCMRVERZXANZ6DP5VCUJ6DPHVD3Z6C35XEJZ6CE4VF3RGCMPVSCRVVP55AU0KL"))
 }
+
 func allInvoices() {
 	_ = boltDB.InitPhoneDB()
 	db, err := bolt.Open("phone.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
