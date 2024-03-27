@@ -46,15 +46,14 @@ func TestPhoneStore_CreateInvoice(t *testing.T) {
 	}(db)
 	s := &PhoneStore{DB: db}
 	err = s.CreateOrUpdateInvoice("invoices", &Invoice{
-		ID:         "4",
-		PubKey:     "4",
+		ID: "4",
+		//PubKey:     "4",
 		Amount:     44,
 		InvoiceStr: "4",
 	})
 	if err != nil {
 		return
 	}
-
 }
 
 func TestPhoneStore_UpdateInvoice(t *testing.T) {
@@ -71,8 +70,8 @@ func TestPhoneStore_UpdateInvoice(t *testing.T) {
 	}(db)
 	s := &PhoneStore{DB: db}
 	newInvoice := &Invoice{
-		ID:         "1",
-		PubKey:     "111",
+		ID: "1",
+		//PubKey:     "111",
 		Amount:     111,
 		InvoiceStr: "111",
 	}
@@ -88,10 +87,10 @@ func TestPhoneStore_UpdateInvoice(t *testing.T) {
 	if !reflect.DeepEqual(wantID, invoice.ID) {
 		t.Errorf("expected:%v, got:%v", wantID, invoice.ID)
 	}
-	wantPubKey := "111"
-	if !reflect.DeepEqual(wantPubKey, invoice.PubKey) {
-		t.Errorf("expected:%v, got:%v", wantPubKey, invoice.PubKey)
-	}
+	//wantPubKey := "111"
+	//if !reflect.DeepEqual(wantPubKey, invoice.PubKey) {
+	//	t.Errorf("expected:%v, got:%v", wantPubKey, invoice.PubKey)
+	//}
 	wantAmount := 111
 	if !reflect.DeepEqual(wantAmount, invoice.Amount) {
 		t.Errorf("expected:%v, got:%v", wantAmount, invoice.Amount)
@@ -132,10 +131,10 @@ func TestPhoneStore_ReadInvoice(t *testing.T) {
 	if !reflect.DeepEqual(wantID, invoice.ID) {
 		t.Errorf("expected:%v, got:%v", wantID, invoice.ID)
 	}
-	wantPubKey := "4"
-	if !reflect.DeepEqual(wantPubKey, invoice.PubKey) {
-		t.Errorf("expected:%v, got:%v", wantPubKey, invoice.PubKey)
-	}
+	//wantPubKey := "4"
+	//if !reflect.DeepEqual(wantPubKey, invoice.PubKey) {
+	//	t.Errorf("expected:%v, got:%v", wantPubKey, invoice.PubKey)
+	//}
 	wantAmount := 44
 	if !reflect.DeepEqual(wantAmount, invoice.Amount) {
 		t.Errorf("expected:%v, got:%v", wantAmount, invoice.Amount)

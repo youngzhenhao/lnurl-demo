@@ -10,8 +10,7 @@ import (
 
 type Invoice struct {
 	ID string
-	// TODO: ...
-	PubKey     string
+	//PubKey     string
 	Amount     int
 	InvoiceStr string
 }

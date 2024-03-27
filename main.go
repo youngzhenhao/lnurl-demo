@@ -5,15 +5,21 @@ import (
 	"github.com/boltdb/bolt"
 	"lnurl-demo/api"
 	"lnurl-demo/boltDB"
+	"lnurl-demo/lnurls"
 	"time"
 )
 
 func main() {
-	allInvoices()
+	//allUsers()
+	//allInvoices()
 	//boltDB.InitServerDB()
 	//boltDB.InitPhoneDB()
+	//fmt.Println(uuid.New().String())
+	//lnurls.RouterRunOnServer()
+	lnurls.RouterRunOnPhone()
 }
 func allInvoices() {
+	_ = boltDB.InitPhoneDB()
 	db, err := bolt.Open("phone.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
 		fmt.Printf("%s bolt.Open :%v\n", api.GetTimeNow(), err)
@@ -29,9 +35,40 @@ func allInvoices() {
 	if err != nil {
 		return
 	}
-	fmt.Printf("%v\n", invoices)
-}
+	if len(invoices) == 0 {
+		fmt.Printf("%v\n", invoices)
+	} else {
+		for _, v := range invoices {
+			fmt.Printf("%v\n", v)
+		}
+	}
 
+}
+func allUsers() {
+	_ = boltDB.InitServerDB()
+	db, err := bolt.Open("server.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
+	if err != nil {
+		fmt.Printf("%s bolt.Open :%v\n", api.GetTimeNow(), err)
+	}
+	defer func(db *bolt.DB) {
+		err := db.Close()
+		if err != nil {
+			fmt.Printf("%s db.Close :%v\n", api.GetTimeNow(), err)
+		}
+	}(db)
+	s := &boltDB.ServerStore{DB: db}
+	users, err := s.AllUsers("users")
+	if err != nil {
+		return
+	}
+	if len(users) == 0 {
+		fmt.Printf("%v\n", users)
+	} else {
+		for _, v := range users {
+			fmt.Printf("%v\n", v)
+		}
+	}
+}
 func sampleOpenBoltDB() *boltDB.ServerStore {
 	db, err := bolt.Open("store.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {

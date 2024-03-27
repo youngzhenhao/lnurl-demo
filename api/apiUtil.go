@@ -31,7 +31,7 @@ func (c *macaroonCredential) RequireTransportSecurity() bool {
 	return true
 }
 
-func getEnv(key string, filename ...string) string {
+func GetEnv(key string, filename ...string) string {
 	err := godotenv.Load(filename...)
 	if err != nil {
 		log.Fatalf("Error loading .env file: %v", err)

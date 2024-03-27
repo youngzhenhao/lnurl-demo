@@ -8,9 +8,9 @@ import (
 )
 
 func AddInvoice(value int64, memo string) string {
-	grpcHost := getEnv("RPC_SERVER")
-	tlsCertPath := getEnv("TLS_CERT_PATH")
-	macaroonPath := getEnv("MACAROON_PATH")
+	grpcHost := GetEnv("RPC_SERVER")
+	tlsCertPath := GetEnv("TLS_CERT_PATH")
+	macaroonPath := GetEnv("MACAROON_PATH")
 	creds := newTlsCert(tlsCertPath)
 	macaroon := getMacaroon(macaroonPath)
 	conn, err := grpc.Dial(grpcHost, grpc.WithTransportCredentials(creds),

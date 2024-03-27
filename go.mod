@@ -47,6 +47,7 @@ require (
 	github.com/dsnet/compress v0.0.2-0.20210315054119-f66993602bf5 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/fergusstrange/embedded-postgres v1.26.0 // indirect
+	github.com/fiatjaf/go-lnurl v1.13.1 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-errors/errors v1.5.1 // indirect
@@ -121,6 +122,7 @@ require (
 	github.com/miekg/dns v1.1.58 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/nbd-wtf/ln-decodepay v1.6.0 // indirect
 	github.com/ncruces/go-strftime v0.1.9 // indirect
 	github.com/nwaples/rardecode v1.1.3 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.8 // indirect
@@ -138,6 +140,9 @@ require (
 	github.com/stretchr/objx v0.5.2 // indirect
 	github.com/stretchr/testify v1.9.0 // indirect
 	github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7 // indirect
+	github.com/tidwall/gjson v1.9.3 // indirect
+	github.com/tidwall/match v1.1.1 // indirect
+	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/tmc/grpc-websocket-proxy v0.0.0-20220101234140-673ab2c3ae75 // indirect
 	github.com/tv42/zbase32 v0.0.0-20220222190657-f76a9fc892fa // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect

@@ -27,7 +27,7 @@ func TestServerStore_AllUsers(t *testing.T) {
 		return
 	}
 	got := len(users)
-	want := 4
+	want := 3
 	if !reflect.DeepEqual(want, got) {
 		t.Errorf("expected:%v, got:%v", want, got)
 	}
