@@ -9,12 +9,13 @@ import (
 	"lnurl-demo/boltDB"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 )
 
 func RouterRunOnPhone() {
 	router := setupRouterOnPhone()
-	err := router.Run(":8080")
+	err := router.Run(":9090")
 	if err != nil {
 		return
 	}
@@ -57,6 +58,7 @@ func setupRouterOnPhone() *gin.Engine {
 		s := &boltDB.PhoneStore{DB: db}
 
 		if result {
+			invoiceStr = strings.ToUpper(invoiceStr)
 			err = s.CreateOrUpdateInvoice("invoices", &boltDB.Invoice{
 				ID: id,
 				//PubKey:     "4",
@@ -67,7 +69,6 @@ func setupRouterOnPhone() *gin.Engine {
 				fmt.Printf("%s CreateOrUpdateInvoice err :%v\n", api.GetTimeNow(), err)
 				result = false
 			}
-			//	TODO: Convert lowercase to uppercase
 		} else {
 			id = ""
 		}

@@ -13,7 +13,7 @@ import (
 
 func RouterRunOnServer() {
 	router := setupRouterOnServer()
-	err := router.Run(":8080")
+	err := router.Run(":9080")
 	if err != nil {
 		return
 	}
@@ -61,7 +61,6 @@ func setupRouterOnServer() *gin.Engine {
 		var lnurlStr string
 		serverDomainOrIp := api.GetEnv("SERVER_DOMAIN_OR_IP")
 		if result {
-			// TODO: /pay
 			lnurlStr = Encode("http://" + serverDomainOrIp + "/pay?id=" + id)
 		} else {
 			id = ""
@@ -73,7 +72,7 @@ func setupRouterOnServer() *gin.Engine {
 			"ip":     ip,
 			"result": result,
 			"lnurl":  lnurlStr,
-			//"url": Decode(lnurlStr),
+			//"url":    Decode(lnurlStr),
 		})
 	})
 
@@ -101,7 +100,7 @@ func setupRouterOnServer() *gin.Engine {
 		if err != nil {
 			fmt.Printf("%s ReadUser err :%v\n", api.GetTimeNow(), err)
 		}
-		// TODO: send POST request to call phone's /addInvoice
+
 		PostPhoneToAddInvoice(user.IP, amount)
 
 		c.JSON(http.StatusOK, gin.H{
@@ -109,11 +108,6 @@ func setupRouterOnServer() *gin.Engine {
 			"id":     id,
 			"result": result,
 		})
-	})
-
-	router.POST("/", func(c *gin.Context) {
-
-		c.JSON(http.StatusOK, gin.H{})
 	})
 
 	return router

@@ -3,9 +3,11 @@ package main
 import (
 	"fmt"
 	"github.com/boltdb/bolt"
+	"io"
 	"lnurl-demo/api"
 	"lnurl-demo/boltDB"
 	"lnurl-demo/lnurls"
+	"strings"
 	"time"
 )
 
@@ -15,8 +17,10 @@ func main() {
 	//boltDB.InitServerDB()
 	//boltDB.InitPhoneDB()
 	//fmt.Println(uuid.New().String())
-	//lnurls.RouterRunOnServer()
-	lnurls.RouterRunOnPhone()
+	lnurls.RouterRunOnServer()
+	//lnurls.RouterRunOnPhone()
+	//fmt.Println(lnurls.Decode("LNURL1DP68GUP69UHNZV3H9CCZUVPWXYARJVPCXQHHQCTE8A5KG0FJXUENSDFJ8YCJ6WPS8PJJ6DPJV5EJ6WR9VCMZ6VENV4JN2DTYX5MNJVMPVCQU33"))
+	//testReadAll()
 }
 func allInvoices() {
 	_ = boltDB.InitPhoneDB()
@@ -44,6 +48,7 @@ func allInvoices() {
 	}
 
 }
+
 func allUsers() {
 	_ = boltDB.InitServerDB()
 	db, err := bolt.Open("server.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
@@ -69,6 +74,7 @@ func allUsers() {
 		}
 	}
 }
+
 func sampleOpenBoltDB() *boltDB.ServerStore {
 	db, err := bolt.Open("store.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
@@ -82,4 +88,13 @@ func sampleOpenBoltDB() *boltDB.ServerStore {
 	}(db)
 	s := &boltDB.ServerStore{DB: db}
 	return s
+}
+
+func testReadAll() {
+	r := strings.NewReader("Go is a general-purpose language designed with systems programming in mind.")
+	b, err := io.ReadAll(r)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Printf("%s", b)
 }
