@@ -1,5 +1,6 @@
 package boltDB
 
 func InitPhoneDB() error {
-	return nil
+	_, err := createBucketInPhoneDB("phone.db", "invoices")
+	return err
 }

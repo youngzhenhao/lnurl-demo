@@ -9,14 +9,12 @@ import (
 )
 
 func main() {
-	//allUsers()
-	boltDB.InitServerDB()
-	boltDB.InitPhoneDB()
+	allInvoices()
+	//boltDB.InitServerDB()
+	//boltDB.InitPhoneDB()
 }
-
-func read() {
-	//fmt.Printf(api.AddInvoice(100, ""))
-	db, err := bolt.Open("store.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
+func allInvoices() {
+	db, err := bolt.Open("phone.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
 		fmt.Printf("%s bolt.Open :%v\n", api.GetTimeNow(), err)
 	}
@@ -26,15 +24,15 @@ func read() {
 			fmt.Printf("%s db.Close :%v\n", api.GetTimeNow(), err)
 		}
 	}(db)
-	s := &boltDB.Store{DB: db}
-	user, err := s.ReadUser("users", "1")
+	s := &boltDB.PhoneStore{DB: db}
+	invoices, err := s.AllInvoices("invoices")
 	if err != nil {
 		return
 	}
-	fmt.Printf("%v\n", user)
+	fmt.Printf("%v\n", invoices)
 }
 
-func allUsers() {
+func sampleOpenBoltDB() *boltDB.ServerStore {
 	db, err := bolt.Open("store.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
 		fmt.Printf("%s bolt.Open :%v\n", api.GetTimeNow(), err)
@@ -45,25 +43,6 @@ func allUsers() {
 			fmt.Printf("%s db.Close :%v\n", api.GetTimeNow(), err)
 		}
 	}(db)
-	s := &boltDB.Store{DB: db}
-	users, err := s.AllUsers("users")
-	if err != nil {
-		return
-	}
-	fmt.Printf("%v\n", users)
-}
-
-func sampleOpenBoltDB() *boltDB.Store {
-	db, err := bolt.Open("store.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
-	if err != nil {
-		fmt.Printf("%s bolt.Open :%v\n", api.GetTimeNow(), err)
-	}
-	defer func(db *bolt.DB) {
-		err := db.Close()
-		if err != nil {
-			fmt.Printf("%s db.Close :%v\n", api.GetTimeNow(), err)
-		}
-	}(db)
-	s := &boltDB.Store{DB: db}
+	s := &boltDB.ServerStore{DB: db}
 	return s
 }
