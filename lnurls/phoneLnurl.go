@@ -23,6 +23,7 @@ func RouterRunOnPhone() {
 
 func setupRouterOnPhone() *gin.Engine {
 	router := gin.Default()
+
 	router.POST("/addInvoice", func(c *gin.Context) {
 
 		id := uuid.New().String()
@@ -81,5 +82,6 @@ func setupRouterOnPhone() *gin.Engine {
 			"result":  result,
 		})
 	})
+
 	return router
 }

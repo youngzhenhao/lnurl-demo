@@ -13,9 +13,9 @@ type ServerStore struct {
 }
 
 type User struct {
-	ID   string
-	Name string
-	IP   string
+	ID     string
+	Name   string
+	Socket string
 	//FuncApi string
 }
 

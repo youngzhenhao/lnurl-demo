@@ -7,10 +7,9 @@ import (
 	"lnurl-demo/api"
 	"net/http"
 	"net/url"
-	"reflect"
 )
 
-type APIResponse struct {
+type InvoiceResponse struct {
 	Time    string `json:"time"`
 	ID      string `json:"id"`
 	Amount  int    `json:"amount"`
@@ -18,8 +17,8 @@ type APIResponse struct {
 	Result  bool   `json:"result"`
 }
 
-func PostPhoneToAddInvoice(ip, amount string) {
-	targetUrl := "http://" + ip + "/addInvoice"
+func PostPhoneToAddInvoice(socket, amount string) string {
+	targetUrl := "http://" + socket + "/addInvoice"
 
 	payload := url.Values{"amount": {amount}}
 
@@ -29,12 +28,10 @@ func PostPhoneToAddInvoice(ip, amount string) {
 	}
 	bodyBytes, _ := io.ReadAll(response.Body)
 
-	var apiResponse APIResponse
-	if err := json.Unmarshal(bodyBytes, &apiResponse); err != nil {
+	var invoiceResponse InvoiceResponse
+	if err := json.Unmarshal(bodyBytes, &invoiceResponse); err != nil {
 		fmt.Printf("%s json.Unmarshal :%v\n", api.GetTimeNow(), err)
-		return
+		return ""
 	}
-
-	fmt.Printf("API Response: %+v\n", apiResponse)
-	fmt.Println(reflect.TypeOf(apiResponse))
+	return invoiceResponse.Invoice
 }

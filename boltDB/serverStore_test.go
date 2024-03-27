@@ -47,9 +47,9 @@ func TestServerStore_CreateUser(t *testing.T) {
 	}(db)
 	s := &ServerStore{DB: db}
 	err = s.CreateOrUpdateUser("users", &User{
-		ID:   "1",
-		Name: "1",
-		IP:   "1",
+		ID:     "1",
+		Name:   "1",
+		Socket: "1",
 	})
 	if err != nil {
 		return
@@ -71,9 +71,9 @@ func TestServerStore_UpdateUser(t *testing.T) {
 	}(db)
 	s := &ServerStore{DB: db}
 	newUser := &User{
-		ID:   "1",
-		Name: "111",
-		IP:   "111",
+		ID:     "1",
+		Name:   "111",
+		Socket: "111",
 	}
 	err = s.CreateOrUpdateUser("users", newUser)
 	if err != nil {
@@ -91,9 +91,9 @@ func TestServerStore_UpdateUser(t *testing.T) {
 	if !reflect.DeepEqual(wantName, user.Name) {
 		t.Errorf("expected:%v, got:%v", wantName, user.Name)
 	}
-	wantIP := "111"
-	if !reflect.DeepEqual(wantIP, user.IP) {
-		t.Errorf("expected:%v, got:%v", wantIP, user.IP)
+	wantSocket := "111"
+	if !reflect.DeepEqual(wantSocket, user.Socket) {
+		t.Errorf("expected:%v, got:%v", wantSocket, user.Socket)
 	}
 	users, err := s.AllUsers("users")
 	if err != nil {
@@ -131,9 +131,9 @@ func TestServerStore_ReadUser(t *testing.T) {
 	if !reflect.DeepEqual(wantName, user.Name) {
 		t.Errorf("expected:%v, got:%v", wantName, user.Name)
 	}
-	wantIP := "1"
-	if !reflect.DeepEqual(wantIP, user.IP) {
-		t.Errorf("expected:%v, got:%v", wantIP, user.IP)
+	wantSocket := "1"
+	if !reflect.DeepEqual(wantSocket, user.Socket) {
+		t.Errorf("expected:%v, got:%v", wantSocket, user.Socket)
 	}
 }
 

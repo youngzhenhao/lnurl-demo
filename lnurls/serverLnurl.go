@@ -26,15 +26,15 @@ func setupRouterOnServer() *gin.Engine {
 		//id := c.Param("id")
 		id := uuid.New().String()
 		name := c.PostForm("name")
-		ip := c.PostForm("ip")
+		socket := c.PostForm("socket")
 		result := true
 		if id == "" || name == "" {
 			result = false
 		}
 		user := &boltDB.User{
-			ID:   id,
-			Name: name,
-			IP:   ip,
+			ID:     id,
+			Name:   name,
+			Socket: socket,
 		}
 		err := boltDB.InitServerDB()
 		if err != nil {
@@ -59,9 +59,9 @@ func setupRouterOnServer() *gin.Engine {
 			}
 		}
 		var lnurlStr string
-		serverDomainOrIp := api.GetEnv("SERVER_DOMAIN_OR_IP")
+		serverDomainOrSocket := api.GetEnv("SERVER_DOMAIN_OR_SOCKET")
 		if result {
-			lnurlStr = Encode("http://" + serverDomainOrIp + "/pay?id=" + id)
+			lnurlStr = Encode("http://" + serverDomainOrSocket + "/pay?id=" + id)
 		} else {
 			id = ""
 		}
@@ -69,7 +69,7 @@ func setupRouterOnServer() *gin.Engine {
 			"time":   api.GetTimeNow(),
 			"id":     id,
 			"name":   name,
-			"ip":     ip,
+			"socket": socket,
 			"result": result,
 			"lnurl":  lnurlStr,
 			//"url":    Decode(lnurlStr),
@@ -101,12 +101,17 @@ func setupRouterOnServer() *gin.Engine {
 			fmt.Printf("%s ReadUser err :%v\n", api.GetTimeNow(), err)
 		}
 
-		PostPhoneToAddInvoice(user.IP, amount)
+		invoice := PostPhoneToAddInvoice(user.Socket, amount)
+
+		if invoice == "" {
+			result = false
+		}
 
 		c.JSON(http.StatusOK, gin.H{
-			"time":   api.GetTimeNow(),
-			"id":     id,
-			"result": result,
+			"time":    api.GetTimeNow(),
+			"id":      id,
+			"invoice": invoice,
+			"result":  result,
 		})
 	})
 
