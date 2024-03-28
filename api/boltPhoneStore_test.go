@@ -1,9 +1,8 @@
-package boltDB
+package api
 
 import (
 	"fmt"
 	"github.com/boltdb/bolt"
-	"lnurl-demo/api"
 	"reflect"
 	"testing"
 	"time"
@@ -16,16 +15,16 @@ func TestInitPhoneDB(t *testing.T) {
 	}
 }
 
-func TestPhoneStore_AllInvoices(t *testing.T) {
+func TestBoltPhoneStore_AllInvoices(t *testing.T) {
 	db, err := bolt.Open("phone.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
-		fmt.Printf("%s bolt.Open :%v\n", api.GetTimeNow(), err)
+		fmt.Printf("%s bolt.Open :%v\n", GetTimeNow(), err)
 	}
 
 	defer func(db *bolt.DB) {
 		err := db.Close()
 		if err != nil {
-			fmt.Printf("%s db.Close :%v\n", api.GetTimeNow(), err)
+			fmt.Printf("%s db.Close :%v\n", GetTimeNow(), err)
 		}
 	}(db)
 	s := &PhoneStore{DB: db}
@@ -40,15 +39,15 @@ func TestPhoneStore_AllInvoices(t *testing.T) {
 	}
 }
 
-func TestPhoneStore_CreateInvoice(t *testing.T) {
+func TestBoltPhoneStore_CreateInvoice(t *testing.T) {
 	db, err := bolt.Open("phone.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
-		fmt.Printf("%s bolt.Open :%v\n", api.GetTimeNow(), err)
+		fmt.Printf("%s bolt.Open :%v\n", GetTimeNow(), err)
 	}
 	defer func(db *bolt.DB) {
 		err := db.Close()
 		if err != nil {
-			fmt.Printf("%s db.Close :%v\n", api.GetTimeNow(), err)
+			fmt.Printf("%s db.Close :%v\n", GetTimeNow(), err)
 		}
 	}(db)
 	s := &PhoneStore{DB: db}
@@ -63,16 +62,16 @@ func TestPhoneStore_CreateInvoice(t *testing.T) {
 	}
 }
 
-func TestPhoneStore_UpdateInvoice(t *testing.T) {
+func TestBoltPhoneStore_UpdateInvoice(t *testing.T) {
 	db, err := bolt.Open("phone.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
-		fmt.Printf("%s bolt.Open :%v\n", api.GetTimeNow(), err)
+		fmt.Printf("%s bolt.Open :%v\n", GetTimeNow(), err)
 	}
 
 	defer func(db *bolt.DB) {
 		err := db.Close()
 		if err != nil {
-			fmt.Printf("%s db.Close :%v\n", api.GetTimeNow(), err)
+			fmt.Printf("%s db.Close :%v\n", GetTimeNow(), err)
 		}
 	}(db)
 	s := &PhoneStore{DB: db}
@@ -117,16 +116,16 @@ func TestPhoneStore_UpdateInvoice(t *testing.T) {
 	}
 }
 
-func TestPhoneStore_ReadInvoice(t *testing.T) {
+func TestBoltPhoneStore_ReadInvoice(t *testing.T) {
 	db, err := bolt.Open("phone.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
-		fmt.Printf("%s bolt.Open :%v\n", api.GetTimeNow(), err)
+		fmt.Printf("%s bolt.Open :%v\n", GetTimeNow(), err)
 	}
 
 	defer func(db *bolt.DB) {
 		err := db.Close()
 		if err != nil {
-			fmt.Printf("%s db.Close :%v\n", api.GetTimeNow(), err)
+			fmt.Printf("%s db.Close :%v\n", GetTimeNow(), err)
 		}
 	}(db)
 	s := &PhoneStore{DB: db}
@@ -152,16 +151,16 @@ func TestPhoneStore_ReadInvoice(t *testing.T) {
 	}
 }
 
-func TestPhoneStore_DeleteInvoice(t *testing.T) {
+func TestBoltPhoneStore_DeleteInvoice(t *testing.T) {
 	db, err := bolt.Open("phone.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
-		fmt.Printf("%s bolt.Open :%v\n", api.GetTimeNow(), err)
+		fmt.Printf("%s bolt.Open :%v\n", GetTimeNow(), err)
 	}
 
 	defer func(db *bolt.DB) {
 		err := db.Close()
 		if err != nil {
-			fmt.Printf("%s db.Close :%v\n", api.GetTimeNow(), err)
+			fmt.Printf("%s db.Close :%v\n", GetTimeNow(), err)
 		}
 	}(db)
 	s := &PhoneStore{DB: db}

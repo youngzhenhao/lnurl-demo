@@ -1,13 +1,12 @@
-package lnurls
+package api
 
 import (
 	"fmt"
 	"github.com/boltdb/bolt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"lnurl-demo/api"
-	"lnurl-demo/boltDB"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -31,45 +30,45 @@ func setupRouterOnServer() *gin.Engine {
 		if name == "" || socket == "" {
 			result = false
 		}
-		user := &boltDB.User{
+		user := &User{
 			ID:     id,
 			Name:   name,
 			Socket: socket,
 		}
 		//fmt.Println(user)
-		err := boltDB.InitServerDB()
+		err := InitServerDB()
 		if err != nil {
-			fmt.Printf("%s InitServerDB err :%v\n", api.GetTimeNow(), err)
+			fmt.Printf("%s InitServerDB err :%v\n", GetTimeNow(), err)
 		}
 		db, err := bolt.Open("server.db", 0600, &bolt.Options{
 			Timeout: 1 * time.Second,
 		})
 		if err != nil {
-			fmt.Printf("%s bolt.Open :%v\n", api.GetTimeNow(), err)
+			fmt.Printf("%s bolt.Open :%v\n", GetTimeNow(), err)
 		}
 		defer func(db *bolt.DB) {
 			err := db.Close()
 			if err != nil {
-				fmt.Printf("%s db.Close :%v\n", api.GetTimeNow(), err)
+				fmt.Printf("%s db.Close :%v\n", GetTimeNow(), err)
 			}
 		}(db)
-		s := &boltDB.ServerStore{DB: db}
+		s := &ServerStore{DB: db}
 		if result {
 			err = s.CreateOrUpdateUser("users", user)
 			if err != nil {
-				fmt.Printf("%s CreateOrUpdateUser err :%v\n", api.GetTimeNow(), err)
+				fmt.Printf("%s CreateOrUpdateUser err :%v\n", GetTimeNow(), err)
 				result = false
 			}
 		}
 		var lnurlStr string
-		serverDomainOrSocket := api.GetEnv("SERVER_DOMAIN_OR_SOCKET")
+		serverDomainOrSocket := GetEnv("SERVER_DOMAIN_OR_SOCKET")
 		if result {
 			lnurlStr = Encode("http://" + serverDomainOrSocket + "/pay?id=" + id)
 		} else {
 			id = ""
 		}
 		c.JSON(http.StatusOK, gin.H{
-			"time":   api.GetTimeNow(),
+			"time":   GetTimeNow(),
 			"id":     id,
 			"name":   name,
 			"socket": socket,
@@ -83,35 +82,43 @@ func setupRouterOnServer() *gin.Engine {
 		id := c.Query("id")
 		amount := c.PostForm("amount")
 		result := true
-
-		err := boltDB.InitServerDB()
+		amountInt, err := strconv.Atoi(amount)
 		if err != nil {
-			fmt.Printf("%s InitServerDB err :%v\n", api.GetTimeNow(), err)
+			result = false
+			fmt.Printf("%s strconv.Atoi(amount) :%v\n", GetTimeNow(), err)
+		}
+		if id == "" || amount == "" || amountInt <= 0 {
+			result = false
+		}
+		err = InitServerDB()
+		if err != nil {
+			fmt.Printf("%s InitServerDB err :%v\n", GetTimeNow(), err)
 		}
 		db, err := bolt.Open("server.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
 		if err != nil {
-			fmt.Printf("%s bolt.Open :%v\n", api.GetTimeNow(), err)
+			fmt.Printf("%s bolt.Open :%v\n", GetTimeNow(), err)
 		}
 		defer func(db *bolt.DB) {
 			err := db.Close()
 			if err != nil {
-				fmt.Printf("%s db.Close :%v\n", api.GetTimeNow(), err)
+				fmt.Printf("%s db.Close :%v\n", GetTimeNow(), err)
 			}
 		}(db)
-		s := &boltDB.ServerStore{DB: db}
+		s := &ServerStore{DB: db}
 		user, err := s.ReadUser("users", id)
 		if err != nil {
-			fmt.Printf("%s ReadUser err :%v\n", api.GetTimeNow(), err)
+			fmt.Printf("%s ReadUser err :%v\n", GetTimeNow(), err)
 		}
 
-		invoice := PostPhoneToAddInvoice(user.Socket, amount)
-
-		if invoice == "" {
+		var invoice string
+		if result {
+			invoice = PostPhoneToAddInvoice(user.Socket, amount)
+		} else {
 			result = false
 		}
 
 		c.JSON(http.StatusOK, gin.H{
-			"time":    api.GetTimeNow(),
+			"time":    GetTimeNow(),
 			"id":      id,
 			"amount":  amount,
 			"invoice": invoice,

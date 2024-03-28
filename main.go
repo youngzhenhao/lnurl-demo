@@ -4,23 +4,29 @@ import (
 	"fmt"
 	"github.com/boltdb/bolt"
 	"lnurl-demo/api"
-	"lnurl-demo/boltDB"
-	"lnurl-demo/lnurls"
 	"time"
 )
 
 func main() {
-	//allUsers()
-	//allInvoices()
 
-	//lnurls.RouterRunOnServer()
-	//lnurls.RouterRunOnPhone()
+	//api.RouterRunOnServer()
+	//api.RouterRunOnPhone()
 
-	fmt.Printf(lnurls.Decode("LNURL1DP68GUP69UHNZV3H9CCZUVPWXYARJVPCXQHHQCTE8A5KG0FSXCMRVERZXANZ6DP5VCUJ6DPHVD3Z6C35XEJZ6CE4VF3RGCMPVSCRVVP55AU0KL"))
+	// TODO: Multiple-Command CLI
+	//ListAllUsers()
+	//ListAllInvoices()
+
+	//lnu := flag.String("lnu", "", "lnurl need to decode")
+	//flag.Parse()
+	//if flag.NFlag() == 0 {
+	//	flag.Usage()
+	//	return
+	//}
+	//fmt.Println(api.Decode(*lnu))
 }
 
-func allInvoices() {
-	_ = boltDB.InitPhoneDB()
+func ListAllInvoices() {
+	_ = api.InitPhoneDB()
 	db, err := bolt.Open("phone.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
 		fmt.Printf("%s bolt.Open :%v\n", api.GetTimeNow(), err)
@@ -31,7 +37,7 @@ func allInvoices() {
 			fmt.Printf("%s db.Close :%v\n", api.GetTimeNow(), err)
 		}
 	}(db)
-	s := &boltDB.PhoneStore{DB: db}
+	s := &api.PhoneStore{DB: db}
 	invoices, err := s.AllInvoices("invoices")
 	if err != nil {
 		return
@@ -46,8 +52,8 @@ func allInvoices() {
 
 }
 
-func allUsers() {
-	_ = boltDB.InitServerDB()
+func ListAllUsers() {
+	_ = api.InitServerDB()
 	db, err := bolt.Open("server.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
 		fmt.Printf("%s bolt.Open :%v\n", api.GetTimeNow(), err)
@@ -58,7 +64,7 @@ func allUsers() {
 			fmt.Printf("%s db.Close :%v\n", api.GetTimeNow(), err)
 		}
 	}(db)
-	s := &boltDB.ServerStore{DB: db}
+	s := &api.ServerStore{DB: db}
 	users, err := s.AllUsers("users")
 	if err != nil {
 		return

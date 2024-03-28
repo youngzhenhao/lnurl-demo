@@ -1,12 +1,10 @@
-package lnurls
+package api
 
 import (
 	"fmt"
 	"github.com/boltdb/bolt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"lnurl-demo/api"
-	"lnurl-demo/boltDB"
 	"net/http"
 	"strconv"
 	"strings"
@@ -28,46 +26,46 @@ func setupRouterOnPhone() *gin.Engine {
 
 		id := uuid.New().String()
 		amountStr := c.PostForm("amount")
-		amountInt, _ := strconv.Atoi(amountStr)
+		amountInt, err := strconv.Atoi(amountStr)
 		result := true
-		if amountInt <= 0 {
+		if err != nil || amountInt <= 0 {
 			result = false
+			fmt.Printf("%s amountInt less than or equal to zero || strconv.Atoi(amount) :%v\n", GetTimeNow(), err)
 		}
 		var invoiceStr string
 		if result {
-			invoiceStr = api.AddInvoice(int64(amountInt), "")
+			invoiceStr = AddInvoiceImportEnv(int64(amountInt), "", "ALICE_RPC_SERVER", "ALICE_TLS_CERT_PATH", "ALICE_MACAROON_PATH")
 		}
 		if invoiceStr == "" {
 			result = false
 		}
 
-		err := boltDB.InitPhoneDB()
+		err = InitPhoneDB()
 		if err != nil {
-			fmt.Printf("%s InitPhoneDB err :%v\n", api.GetTimeNow(), err)
+			fmt.Printf("%s InitPhoneDB err :%v\n", GetTimeNow(), err)
 		}
 
 		db, err := bolt.Open("phone.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
 		if err != nil {
-			fmt.Printf("%s bolt.Open :%v\n", api.GetTimeNow(), err)
+			fmt.Printf("%s bolt.Open :%v\n", GetTimeNow(), err)
 		}
 		defer func(db *bolt.DB) {
 			err := db.Close()
 			if err != nil {
-				fmt.Printf("%s db.Close :%v\n", api.GetTimeNow(), err)
+				fmt.Printf("%s db.Close :%v\n", GetTimeNow(), err)
 			}
 		}(db)
-		s := &boltDB.PhoneStore{DB: db}
+		s := &PhoneStore{DB: db}
 
 		if result {
 			invoiceStr = strings.ToUpper(invoiceStr)
-			err = s.CreateOrUpdateInvoice("invoices", &boltDB.Invoice{
-				ID: id,
-				//PubKey:     "4",
+			err = s.CreateOrUpdateInvoice("invoices", &Invoice{
+				ID:         id,
 				Amount:     amountInt,
 				InvoiceStr: invoiceStr,
 			})
 			if err != nil {
-				fmt.Printf("%s CreateOrUpdateInvoice err :%v\n", api.GetTimeNow(), err)
+				fmt.Printf("%s CreateOrUpdateInvoice err :%v\n", GetTimeNow(), err)
 				result = false
 			}
 		} else {
@@ -75,7 +73,7 @@ func setupRouterOnPhone() *gin.Engine {
 		}
 
 		c.JSON(http.StatusOK, gin.H{
-			"time":    api.GetTimeNow(),
+			"time":    GetTimeNow(),
 			"id":      id,
 			"amount":  amountInt,
 			"invoice": invoiceStr,

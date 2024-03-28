@@ -1,10 +1,9 @@
-package boltDB
+package api
 
 import (
 	"encoding/json"
 	"fmt"
 	"github.com/boltdb/bolt"
-	"lnurl-demo/api"
 	"time"
 )
 
@@ -16,7 +15,6 @@ type User struct {
 	ID     string `json:"id"`
 	Name   string `json:"name"`
 	Socket string `json:"socket"`
-	//FuncApi string
 }
 
 func InitServerDB() error {
@@ -27,13 +25,13 @@ func InitServerDB() error {
 func createBucketInServerDB(DBName, bucket string) (*bolt.Bucket, error) {
 	db, err := bolt.Open(DBName, 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
-		fmt.Printf("%s bolt.Open :%v\n", api.GetTimeNow(), err)
+		fmt.Printf("%s bolt.Open :%v\n", GetTimeNow(), err)
 	}
 
 	defer func(db *bolt.DB) {
 		err := db.Close()
 		if err != nil {
-			fmt.Printf("%s db.Close :%v\n", api.GetTimeNow(), err)
+			fmt.Printf("%s db.Close :%v\n", GetTimeNow(), err)
 		}
 	}(db)
 	var b *bolt.Bucket
@@ -70,7 +68,7 @@ func (s *ServerStore) AllUsers(bucket string) ([]User, error) {
 	return users, nil
 }
 
-// CURE
+// CURD
 
 func (s *ServerStore) CreateOrUpdateUser(bucket string, u *User) error {
 	return s.DB.Update(func(tx *bolt.Tx) error {

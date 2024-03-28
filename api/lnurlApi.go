@@ -1,17 +1,32 @@
 package api
 
-func UploadUserInfo() {
+// UploadUserInfo
+//
+//	@Description: Alice's upload workflow, call after Alice and server's web services are launched
+//	Alice's front-end uses this LNURL to generate a QR code that waits to be scanned
+//	@param name
+//	@param socket
+//	@return string
+func UploadUserInfo(name, socket string) string {
 	// TODO: Alice's upload workflow
 	// 1. upload info to get LNURL
-
+	return PostServerToUploadUserInfo(name, socket)
 }
 
-func PayToLnurl(ln string) {
+// PayToLnurl
+//
+//	@Description: Bob's pay-to-lnurl workflow, call after Alice's LNURL QR code is generated
+//	Bob's front-end scans the Alice's QR code to get the LNURL and then calls the PayToLnurl with amount which Bob wanna pay
+//	@param ln
+//	@param amount
+//	@return string
+func PayToLnurl(lnu, amount string) string {
 	// TODO: pay-to-lnurl workflow by simulating Bob's operation
-	// 1. decode LNURL
-	// 2. send POST with amount by decoded URL to get invoice
+	// 0. decode LNURL(NEED NO MORE)
+	// 1. send POST with amount by decoded URL to get invoice
 	// 	  Use Same InvoiceResponse
-	// 3. pay to invoice
+	invoice := PostServerToPayByPhoneAddInvoice(lnu, amount)
+	// 2. pay to invoice
 	//	  config Bob's RPC_SERVER, TLS_CERT_PATH, MACAROON_PATH
-
+	return SendPaymentSyncImportEnv(invoice, "BOB_RPC_SERVER", "BOB_TLS_CERT_PATH", "BOB_MACAROON_PATH")
 }

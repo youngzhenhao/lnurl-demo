@@ -1,16 +1,14 @@
-package boltDB
+package api
 
 import (
 	"encoding/json"
 	"fmt"
 	"github.com/boltdb/bolt"
-	"lnurl-demo/api"
 	"time"
 )
 
 type Invoice struct {
-	ID string `json:"id"`
-	//PubKey     string
+	ID         string `json:"id"`
 	Amount     int    `json:"amount"`
 	InvoiceStr string `json:"invoiceStr"`
 }
@@ -27,13 +25,13 @@ func InitPhoneDB() error {
 func createBucketInPhoneDB(DBName, bucket string) (*bolt.Bucket, error) {
 	db, err := bolt.Open(DBName, 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
-		fmt.Printf("%s bolt.Open :%v\n", api.GetTimeNow(), err)
+		fmt.Printf("%s bolt.Open :%v\n", GetTimeNow(), err)
 	}
 
 	defer func(db *bolt.DB) {
 		err := db.Close()
 		if err != nil {
-			fmt.Printf("%s db.Close :%v\n", api.GetTimeNow(), err)
+			fmt.Printf("%s db.Close :%v\n", GetTimeNow(), err)
 		}
 	}(db)
 	var b *bolt.Bucket
