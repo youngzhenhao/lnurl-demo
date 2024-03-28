@@ -8,6 +8,18 @@
 
 ## Steps
 
+0. Configure the right values in .env
+
+```go
+SERVER_DOMAIN_OR_SOCKET="127.0.0.1:9080"
+ALICE_RPC_SERVER=""
+ALICE_TLS_CERT_PATH=""
+ALICE_MACAROON_PATH=""
+BOB_RPC_SERVER=""
+BOB_TLS_CERT_PATH=""
+BOB_MACAROON_PATH=""
+```
+
 1. Alice runs service on Phone
 
 ```go
