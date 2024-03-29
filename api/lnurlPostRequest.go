@@ -30,7 +30,7 @@ func PostServerToUploadUserInfo(name, socket string) string {
 	serverDomainOrSocket := GetEnv("SERVER_DOMAIN_OR_SOCKET")
 	targetUrl := "http://" + serverDomainOrSocket + "/upload/user"
 
-	payload := url.Values{"name": {name}, "amount": {socket}}
+	payload := url.Values{"name": {name}, "socket": {socket}}
 
 	response, err := http.PostForm(targetUrl, payload)
 	if err != nil {
