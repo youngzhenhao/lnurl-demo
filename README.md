@@ -32,15 +32,15 @@ api.RouterRunOnPhone()
 api.RouterRunOnServer()
 ```
 
-3. Alice uploads info to Server
+3. Alice uploads info to Server, then gets LNURL
 
 ```go
 api.UploadUserInfo(name, socket) 
 ```
 
-4. Alice gets LNURL, (Alice generates QR code, Bob scans QR code)
+4. *(Alice generates QR code, Bob scans QR code)*
 
-*Front-end implementation*
+- You can try to generate the QR code by `qrc.js` in directory qrc
 
 5. Bob uses LNURL to pay amount of stas
 

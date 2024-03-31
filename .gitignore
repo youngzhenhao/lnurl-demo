@@ -3,3 +3,4 @@
 *.db
 ./*_test.go
 *.exe~
+node_modules

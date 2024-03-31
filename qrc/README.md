@@ -1,0 +1,8 @@
+1. Install dependencies
+```bash
+yarn
+```
+2. Output the QR code in your console
+```bash
+node .\qrc.js --lnu LNURL1DP68GUP69UHNZV3H9CCZUVPWXYARJVPCXQHHQCTE8A5KG0TZXENRXCEHX5EZ6CEJXUUJ6DPNVYEZ6WPCX5MZ6C3KXQCX2CE48QUKZVMXCGS55Y
+```
