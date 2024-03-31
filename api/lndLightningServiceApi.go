@@ -74,6 +74,5 @@ func SendPaymentSyncImportEnv(invoice, _rpcServer, _tlsCertPath, _macaroonPath s
 		fmt.Printf("%s client.SendPaymentSync :%v\n", GetTimeNow(), err)
 		return "false"
 	}
-	fmt.Printf(GetTimeNow() + stream.String())
 	return hex.EncodeToString(stream.PaymentHash)
 }

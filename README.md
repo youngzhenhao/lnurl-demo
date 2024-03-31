@@ -1,7 +1,5 @@
 # lnurl-demo
 
-**This demo hasn't been fully tested yet.**
-
 ## Design
 
 ![LNURL](./LNURL.jpg)

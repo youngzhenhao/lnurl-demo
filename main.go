@@ -17,22 +17,8 @@ func main() {
 	//ListAllUsers()
 	//ListAllInvoices()
 
-	//lnu := flag.String("lnu", "", "lnurl need to decode")
-	//flag.Parse()
-	//if flag.NFlag() == 0 {
-	//	flag.Usage()
-	//	return
-	//}
-	//fmt.Println(api.Decode(*lnu))
-
-	name := flag.String("name", "", "Alice's name")
-	socket := flag.String("socket", "", "Alice's socket")
-	flag.Parse()
-	if flag.NFlag() == 0 {
-		flag.Usage()
-		return
-	}
-	fmt.Print(api.UploadUserInfo(*name, *socket))
+	//UploadUserInfoRun()
+	PayToLnurlRun()
 }
 
 func ListAllInvoices() {
