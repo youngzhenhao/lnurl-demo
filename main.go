@@ -87,3 +87,25 @@ func ListAllUsers() {
 		}
 	}
 }
+
+func UploadUserInfoRun() {
+	name := flag.String("name", "", "Alice's name")
+	socket := flag.String("socket", "", "Alice's socket")
+	flag.Parse()
+	if flag.NFlag() == 0 {
+		flag.Usage()
+		return
+	}
+	fmt.Print(api.UploadUserInfo(*name, *socket))
+}
+
+func PayToLnurlRun() {
+	lnu := flag.String("lnu", "", "Alice's LNURL")
+	amount := flag.String("amount", "", "Bob's amount pay to Alice")
+	flag.Parse()
+	if flag.NFlag() == 0 {
+		flag.Usage()
+		return
+	}
+	fmt.Print(api.PayToLnurl(*lnu, *amount))
+}

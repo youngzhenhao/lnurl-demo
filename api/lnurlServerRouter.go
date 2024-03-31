@@ -113,7 +113,8 @@ func setupRouterOnServer() *gin.Engine {
 		var invoice string
 		if result {
 			invoice = PostPhoneToAddInvoice(user.Socket, amount)
-		} else {
+		}
+		if invoice == "" {
 			result = false
 		}
 

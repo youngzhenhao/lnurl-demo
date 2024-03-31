@@ -11,7 +11,7 @@ import (
 type InvoiceResponse struct {
 	Time    string `json:"time"`
 	ID      string `json:"id"`
-	Amount  int    `json:"amount"`
+	Amount  string `json:"amount"`
 	Invoice string `json:"invoice"`
 	Result  bool   `json:"result"`
 }
@@ -40,7 +40,7 @@ func PostServerToUploadUserInfo(name, socket string) string {
 
 	var userResponse UserResponse
 	if err := json.Unmarshal(bodyBytes, &userResponse); err != nil {
-		fmt.Printf("%s json.Unmarshal :%v\n", GetTimeNow(), err)
+		fmt.Printf("%s PSTUUI json.Unmarshal :%v\n", GetTimeNow(), err)
 		return ""
 	}
 	return userResponse.Lnurl
@@ -60,7 +60,7 @@ func PostPhoneToAddInvoice(socket, amount string) string {
 
 	var invoiceResponse InvoiceResponse
 	if err := json.Unmarshal(bodyBytes, &invoiceResponse); err != nil {
-		fmt.Printf("%s json.Unmarshal :%v\n", GetTimeNow(), err)
+		fmt.Printf("%s PPTAI json.Unmarshal :%v\n", GetTimeNow(), err)
 		return ""
 	}
 	return invoiceResponse.Invoice
@@ -77,7 +77,7 @@ func PostServerToPayByPhoneAddInvoice(lnu, amount string) string {
 	bodyBytes, _ := io.ReadAll(response.Body)
 	var invoiceResponse InvoiceResponse
 	if err := json.Unmarshal(bodyBytes, &invoiceResponse); err != nil {
-		fmt.Printf("%s json.Unmarshal :%v\n", GetTimeNow(), err)
+		fmt.Printf("%s PSTPBPAI json.Unmarshal :%v\n", GetTimeNow(), err)
 		return ""
 	}
 	return invoiceResponse.Invoice

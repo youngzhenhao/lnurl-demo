@@ -75,7 +75,7 @@ func setupRouterOnPhone() *gin.Engine {
 		c.JSON(http.StatusOK, gin.H{
 			"time":    GetTimeNow(),
 			"id":      id,
-			"amount":  amountInt,
+			"amount":  amountStr,
 			"invoice": invoiceStr,
 			"result":  result,
 		})
