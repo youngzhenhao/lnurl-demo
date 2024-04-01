@@ -2,34 +2,13 @@ package api
 
 import (
 	"bytes"
-	"context"
-	"crypto/tls"
-	"crypto/x509"
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"github.com/joho/godotenv"
-	"google.golang.org/grpc/credentials"
 	"log"
 	"os"
 	"time"
 )
-
-type macaroonCredential struct {
-	macaroon string
-}
-
-func newMacaroonCredential(macaroon string) *macaroonCredential {
-	return &macaroonCredential{macaroon: macaroon}
-}
-
-func (c *macaroonCredential) GetRequestMetadata(ctx context.Context, uri ...string) (map[string]string, error) {
-	return map[string]string{"macaroon": c.macaroon}, nil
-}
-
-func (c *macaroonCredential) RequireTransportSecurity() bool {
-	return true
-}
 
 func GetEnv(key string, filename ...string) string {
 	err := godotenv.Load(filename...)
@@ -38,32 +17,6 @@ func GetEnv(key string, filename ...string) string {
 	}
 	value := os.Getenv(key)
 	return value
-}
-
-func newTlsCert(tlsCertPath string) credentials.TransportCredentials {
-	cert, err := os.ReadFile(tlsCertPath)
-	if err != nil {
-		log.Fatalf("Failed to read cert file: %s", err)
-	}
-	certPool := x509.NewCertPool()
-	if !certPool.AppendCertsFromPEM(cert) {
-		log.Fatalf("Failed to append cert")
-	}
-	config := &tls.Config{
-		MinVersion: tls.VersionTLS12,
-		RootCAs:    certPool,
-	}
-	creds := credentials.NewTLS(config)
-	return creds
-}
-
-func getMacaroon(macaroonPath string) string {
-	macaroonBytes, err := os.ReadFile(macaroonPath)
-	if err != nil {
-		panic(err)
-	}
-	macaroon := hex.EncodeToString(macaroonBytes)
-	return macaroon
 }
 
 func GetTimeNow() string {

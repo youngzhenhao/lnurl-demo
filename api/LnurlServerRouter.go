@@ -5,6 +5,7 @@ import (
 	"github.com/boltdb/bolt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -22,10 +23,13 @@ func setupRouterOnServer() *gin.Engine {
 	router := gin.Default()
 
 	router.POST("/upload/user", func(c *gin.Context) {
-		//id := c.Param("id")
 		id := uuid.New().String()
 		name := c.PostForm("name")
-		socket := c.PostForm("socket")
+		ip := c.ClientIP()
+		log.Println(ip)
+		port := c.PostForm("port")
+		log.Println(port)
+		socket := ip + port
 		result := true
 		if name == "" || socket == "" {
 			result = false
@@ -35,7 +39,6 @@ func setupRouterOnServer() *gin.Engine {
 			Name:   name,
 			Socket: socket,
 		}
-		//fmt.Println(user)
 		err := InitServerDB()
 		if err != nil {
 			fmt.Printf("%s InitServerDB err :%v\n", GetTimeNow(), err)
@@ -74,7 +77,6 @@ func setupRouterOnServer() *gin.Engine {
 			"socket": socket,
 			"result": result,
 			"lnurl":  lnurlStr,
-			//"url":    Decode(lnurlStr),
 		})
 	})
 

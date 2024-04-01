@@ -10,16 +10,11 @@ import (
 
 func main() {
 
-	// TODO: Multiple-Command CLI
 	//ListAllUsers()
-	//ListAllInvoices()
 	//DecodeLnurl()
 
-	//ServerRun()
-	//PhoneRun()
+	ServerRun()
 
-	//UploadUserInfoRun()
-	PayToLnurlRun()
 }
 
 func ListAllUsers() {
@@ -48,61 +43,8 @@ func ListAllUsers() {
 	}
 }
 
-func ListAllInvoices() {
-	_ = api.InitPhoneDB()
-	db, err := bolt.Open("phone.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
-	if err != nil {
-		fmt.Printf("%s bolt.Open :%v\n", api.GetTimeNow(), err)
-	}
-	defer func(db *bolt.DB) {
-		err := db.Close()
-		if err != nil {
-			fmt.Printf("%s db.Close :%v\n", api.GetTimeNow(), err)
-		}
-	}(db)
-	s := &api.PhoneStore{DB: db}
-	invoices, err := s.AllInvoices("invoices")
-	if err != nil {
-		return
-	}
-	if len(invoices) == 0 {
-		fmt.Printf("%v\n", invoices)
-	} else {
-		for _, v := range invoices {
-			fmt.Printf("%v\n", v)
-		}
-	}
-
-}
-
 func ServerRun() {
 	api.RouterRunOnServer()
-}
-
-func PhoneRun() {
-	api.RouterRunOnPhone()
-}
-
-func UploadUserInfoRun() {
-	name := flag.String("name", "", "Alice's name")
-	socket := flag.String("socket", "", "Alice's socket")
-	flag.Parse()
-	if flag.NFlag() == 0 {
-		flag.Usage()
-		return
-	}
-	fmt.Print(api.UploadUserInfo(*name, *socket))
-}
-
-func PayToLnurlRun() {
-	lnu := flag.String("lnu", "", "Alice's LNURL")
-	amount := flag.String("amount", "", "Bob's amount pay to Alice")
-	flag.Parse()
-	if flag.NFlag() == 0 {
-		flag.Usage()
-		return
-	}
-	fmt.Print(api.PayToLnurl(*lnu, *amount))
 }
 
 func DecodeLnurl() {
