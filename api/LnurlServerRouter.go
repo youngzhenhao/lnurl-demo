@@ -28,7 +28,7 @@ func setupRouterOnServer() *gin.Engine {
 		port := c.PostForm("port")
 		socket := ip + ":" + port
 		result := true
-		if name == "" || socket == "" {
+		if name == "" || port == "" {
 			result = false
 		}
 		user := &User{
