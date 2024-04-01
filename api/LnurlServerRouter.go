@@ -5,7 +5,6 @@ import (
 	"github.com/boltdb/bolt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -26,10 +25,8 @@ func setupRouterOnServer() *gin.Engine {
 		id := uuid.New().String()
 		name := c.PostForm("name")
 		ip := c.ClientIP()
-		log.Println(ip)
 		port := c.PostForm("port")
-		log.Println(port)
-		socket := ip + port
+		socket := ip + ":" + port
 		result := true
 		if name == "" || socket == "" {
 			result = false
