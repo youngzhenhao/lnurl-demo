@@ -25,12 +25,12 @@ type UserResponse struct {
 	Lnurl  string `json:"lnurl"`
 }
 
-func PostServerToUploadUserInfo(name, socket string) string {
+func PostServerToUploadUserInfo(name, port string) string {
 
 	serverDomainOrSocket := GetEnv("SERVER_DOMAIN_OR_SOCKET")
 	targetUrl := "http://" + serverDomainOrSocket + "/upload/user"
 
-	payload := url.Values{"name": {name}, "socket": {socket}}
+	payload := url.Values{"name": {name}, "port": {port}}
 
 	response, err := http.PostForm(targetUrl, payload)
 	if err != nil {
@@ -44,26 +44,6 @@ func PostServerToUploadUserInfo(name, socket string) string {
 		return ""
 	}
 	return userResponse.Lnurl
-}
-
-// PostPhoneToAddInvoice called by server
-func PostPhoneToAddInvoice(socket, amount string) string {
-	targetUrl := "http://" + socket + "/addInvoice"
-
-	payload := url.Values{"amount": {amount}}
-
-	response, err := http.PostForm(targetUrl, payload)
-	if err != nil {
-		fmt.Printf("%s http.PostForm :%v\n", GetTimeNow(), err)
-	}
-	bodyBytes, _ := io.ReadAll(response.Body)
-
-	var invoiceResponse InvoiceResponse
-	if err := json.Unmarshal(bodyBytes, &invoiceResponse); err != nil {
-		fmt.Printf("%s PPTAI json.Unmarshal :%v\n", GetTimeNow(), err)
-		return ""
-	}
-	return invoiceResponse.Invoice
 }
 
 // PostServerToPayByPhoneAddInvoice called by Bob

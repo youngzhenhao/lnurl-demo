@@ -1,26 +1,26 @@
 package api
 
-// UploadUserInfo
+// LnurlUploadUserInfo
 //
 //	@Description: Alice's upload workflow, call after Alice and server's web services are launched
 //	Alice's front-end uses this LNURL to generate a QR code that waits to be scanned
 //	@param name
-//	@param socket
+//	@param port
 //	@return string
-func UploadUserInfo(name, socket string) string {
+func LnurlUploadUserInfo(name, port string) string {
 	// TODO: Alice's upload workflow
 	// 1. upload info to get LNURL
-	return PostServerToUploadUserInfo(name, socket)
+	return PostServerToUploadUserInfo(name, port)
 }
 
-// PayToLnurl
+// LnurlPayToLnu
 //
 //	@Description: Bob's pay-to-lnurl workflow, call after Alice's LNURL QR code is generated
-//	Bob's front-end scans the Alice's QR code to get the LNURL and then calls the PayToLnurl with amount which Bob wanna pay
+//	Bob's front-end scans the Alice's QR code to get the LNURL and then calls the LnurlPayToLnu with amount which Bob wanna pay
 //	@param ln
 //	@param amount
 //	@return string
-func PayToLnurl(lnu, amount string) string {
+func LnurlPayToLnu(lnu, amount string) string {
 	// TODO: pay-to-lnurl workflow by simulating Bob's operation
 	// 0. decode LNURL(NEED NO MORE)
 	// 1. send POST with amount by decoded URL to get invoice
