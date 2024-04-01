@@ -4,3 +4,4 @@
 ./*_test.go
 *.exe~
 node_modules
+*.zip

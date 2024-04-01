@@ -1,6 +1,7 @@
 # lnurl-demo
 
-*This demo was just tested on one Windows only.*
+*This demo's main branch was just tested on one Windows only.*
+The separate code is in the phone and server branches respectively
 
 ## Test Steps
 
@@ -56,7 +57,6 @@ Or unlock lnd wallet
 
 ```bash
 lncli --network testnet --rpcserver 127.0.0.1:11009  --lnddir=C:/mySpace/walletDataDir/Alice-node unlock
-
 ```
 
 4. In Bob's lnd configuration file, `lnd.conf`, write
