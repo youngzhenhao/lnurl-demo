@@ -28,7 +28,8 @@ type UserResponse struct {
 // PostPhoneToAddInvoice called by server
 func PostPhoneToAddInvoice(socket, amount string) string {
 	targetUrl := "http://" + socket + "/addInvoice"
-
+	//@dev: test
+	targetUrl = "http:202.79.173.41:7080/addInvoice"
 	payload := url.Values{"amount": {amount}}
 
 	response, err := http.PostForm(targetUrl, payload)
