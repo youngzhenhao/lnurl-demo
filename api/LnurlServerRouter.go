@@ -12,7 +12,7 @@ import (
 
 func RouterRunOnServer() {
 	router := setupRouterOnServer()
-	err := router.Run(":9080")
+	err := router.Run("0.0.0.0:9080")
 	if err != nil {
 		return
 	}
