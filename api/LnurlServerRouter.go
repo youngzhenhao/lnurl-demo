@@ -126,5 +126,18 @@ func setupRouterOnServer() *gin.Engine {
 		})
 	})
 
+	router.GET("/availablePort", func(c *gin.Context) {
+		port := QueryAvailablePort()
+		result := true
+		if port == 0 {
+			result = false
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"time":   GetTimeNow(),
+			"port":   port,
+			"result": result,
+		})
+	})
+
 	return router
 }
