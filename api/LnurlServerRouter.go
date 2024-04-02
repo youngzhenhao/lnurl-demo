@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/boltdb/bolt"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"net/http"
 	"strconv"
 	"time"
@@ -22,19 +21,21 @@ func setupRouterOnServer() *gin.Engine {
 	router := gin.Default()
 
 	router.POST("/upload/user", func(c *gin.Context) {
-		id := uuid.New().String()
+		id := c.PostForm("id")
 		name := c.PostForm("name")
 		ip := c.ClientIP()
-		port := c.PostForm("port")
-		socket := ip + ":" + port
+		localPort := c.PostForm("local_port")
+		socket := ip + ":" + localPort
+		remotePort := c.PostForm("remote_port")
 		result := true
-		if name == "" || port == "" {
+		if name == "" || localPort == "" {
 			result = false
 		}
 		user := &User{
-			ID:     id,
-			Name:   name,
-			Socket: socket,
+			ID:         id,
+			Name:       name,
+			Socket:     socket,
+			RemotePort: remotePort,
 		}
 		err := InitServerDB()
 		if err != nil {
@@ -61,19 +62,20 @@ func setupRouterOnServer() *gin.Engine {
 			}
 		}
 		var lnurlStr string
-		serverDomainOrSocket := GetEnv("SERVER_DOMAIN_OR_SOCKET")
+		serverDomainOrSocket := GetEnv("LnurlServerHost")
 		if result {
 			lnurlStr = Encode("http://" + serverDomainOrSocket + "/pay?id=" + id)
 		} else {
 			id = ""
 		}
 		c.JSON(http.StatusOK, gin.H{
-			"time":   GetTimeNow(),
-			"id":     id,
-			"name":   name,
-			"socket": socket,
-			"result": result,
-			"lnurl":  lnurlStr,
+			"time":        GetTimeNow(),
+			"id":          id,
+			"name":        name,
+			"socket":      socket,
+			"remote_port": remotePort,
+			"result":      result,
+			"lnurl":       lnurlStr,
 		})
 	})
 
@@ -111,7 +113,8 @@ func setupRouterOnServer() *gin.Engine {
 
 		var invoice string
 		if result {
-			invoice = PostPhoneToAddInvoice(user.Socket, amount)
+			//@dev: RemotePort
+			invoice = PostPhoneToAddInvoice(user.RemotePort, amount)
 		}
 		if invoice == "" {
 			result = false
@@ -127,15 +130,15 @@ func setupRouterOnServer() *gin.Engine {
 	})
 
 	router.GET("/availablePort", func(c *gin.Context) {
-		port := QueryAvailablePort()
+		remotePort := QueryAvailablePort()
 		result := true
-		if port == 0 {
+		if remotePort == 0 {
 			result = false
 		}
 		c.JSON(http.StatusOK, gin.H{
-			"time":   GetTimeNow(),
-			"port":   port,
-			"result": result,
+			"time":        GetTimeNow(),
+			"remote_port": remotePort,
+			"result":      result,
 		})
 	})
 
