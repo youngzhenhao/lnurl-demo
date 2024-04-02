@@ -12,9 +12,9 @@ func main() {
 
 	//ListAllInvoices()
 	//DecodeLnurl()
-	//PhoneRun()
+	PhoneRun()
 	//UploadUserInfoRun()
-	PayToLnurlRun()
+	//PayToLnurlRun()
 }
 
 func ListAllInvoices() {
