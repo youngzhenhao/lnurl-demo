@@ -37,7 +37,7 @@ func QueryAvailablePort() uint16 {
 }
 
 func QueryIsPortListening(remotePort string) bool {
-	socket := fmt.Sprintf(":%d", remotePort)
+	socket := fmt.Sprintf(":%s", remotePort)
 	listener, err := net.Listen("tcp", socket)
 	if err == nil {
 		_ = listener.Close()
