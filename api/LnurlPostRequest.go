@@ -50,7 +50,7 @@ func PostServerToUploadUserInfo(id, name, localPort, remotePort string) string {
 // PostPhoneToAddInvoice called by server
 func PostPhoneToAddInvoice(remotePort, amount string) string {
 
-	frpsForwardSocket := fmt.Sprintf("%s:%s", GetEnv("LnurlServerHost"), remotePort)
+	frpsForwardSocket := fmt.Sprintf("%s:%s", GetEnv("serverAddr"), remotePort)
 
 	targetUrl := "http://" + frpsForwardSocket + "/addInvoice"
 
